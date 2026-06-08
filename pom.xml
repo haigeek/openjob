@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
 
     <groupId>io.openjob</groupId>
@@ -296,7 +296,7 @@
     </profiles>
 
     <!-- Distribution management -->
-    <distributionManagement>
+    <!-- <distributionManagement>
         <repository>
             <id>oss-openjob</id>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
@@ -304,6 +304,18 @@
         <snapshotRepository>
             <id>oss-openjob</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement> -->
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>libs-release</name>
+            <url>http://192.168.1.181:8081/artifactory/libs-release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>libs-snapshot</name>
+            <url>http://192.168.1.181:8081/artifactory/libs-snapshot-local</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
