@@ -264,17 +264,33 @@ public class TaskDAO {
      * Find child task list
      *
      * @param taskId taskId
+     * @param page   page
+     * @param size   size
      * @return List
      */
-    public List<Task> findChildTaskList(String taskId) {
+    public List<Task> findChildTaskList(String taskId, Integer page, Integer size) {
         try {
-            return taskPersistence.findChildTaskList(taskId);
+            return taskPersistence.findChildTaskList(taskId, page, size);
         } catch (SQLException e) {
             log.error("Task findChildTaskList failed!", e);
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Count child task list
+     *
+     * @param taskId taskId
+     * @return long
+     */
+    public long countChildTaskList(String taskId) {
+        try {
+            return taskPersistence.countChildTaskList(taskId);
+        } catch (SQLException e) {
+            log.error("Task countChildTaskList failed!", e);
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Count task.

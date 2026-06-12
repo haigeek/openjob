@@ -32,3 +32,4 @@ hs_err_pid*
 .gradle
 build
 .vscode/
+openjob-server/openjob-server-starter/src/main/resources/application-local.properties

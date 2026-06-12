@@ -446,11 +446,13 @@ public class H2TaskMemoryPersistence implements TaskPersistence {
     }
 
     @Override
-    public List<Task> findChildTaskList(String taskId) throws SQLException {
+    public List<Task> findChildTaskList(String taskId, Integer page, Integer size) throws SQLException {
         ResultSet rs = null;
-        String sql = "SELECT * FROM `task` WHERE `task_parent_id`=?";
+        String sql = "SELECT * FROM `task` WHERE `task_parent_id`=? ORDER BY `id` DESC LIMIT ? OFFSET ?";
         try (Connection connection = this.connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, taskId);
+            ps.setInt(2, size);
+            ps.setInt(3, (page - 1) * size);
             rs = ps.executeQuery();
 
             List<Task> taskList = new ArrayList<>();
@@ -458,6 +460,24 @@ public class H2TaskMemoryPersistence implements TaskPersistence {
                 taskList.add(convert(rs));
             }
             return taskList;
+        } finally {
+            if (Objects.nonNull(rs)) {
+                rs.close();
+            }
+        }
+    }
+
+    @Override
+    public long countChildTaskList(String taskId) throws SQLException {
+        ResultSet rs = null;
+        String sql = "SELECT COUNT(*) FROM `task` WHERE `task_parent_id`=?";
+        try (Connection connection = this.connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, taskId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0L;
         } finally {
             if (Objects.nonNull(rs)) {
                 rs.close();

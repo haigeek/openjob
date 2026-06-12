@@ -32,4 +32,14 @@ public class ServerInstanceTaskChildListPullRequest implements Serializable {
      * Task id
      */
     private String taskId;
+
+    /**
+     * Page
+     */
+    private Integer page;
+
+    /**
+     * Size
+     */
+    private Integer size;
 }

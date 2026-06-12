@@ -157,10 +157,21 @@ public interface TaskPersistence {
      * Find child task list
      *
      * @param taskId taskId
+     * @param page   page
+     * @param size   size
      * @return List
      * @throws SQLException SQLException
      */
-    List<Task> findChildTaskList(String taskId) throws SQLException;
+    List<Task> findChildTaskList(String taskId, Integer page, Integer size) throws SQLException;
+
+    /**
+     * Count child task list
+     *
+     * @param taskId taskId
+     * @return long
+     * @throws SQLException SQLException
+     */
+    long countChildTaskList(String taskId) throws SQLException;
 
     /**
      * Batch update exception by worker address list.

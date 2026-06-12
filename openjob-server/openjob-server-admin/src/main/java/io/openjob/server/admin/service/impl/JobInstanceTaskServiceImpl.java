@@ -6,6 +6,7 @@ import io.openjob.common.constant.InstanceStatusEnum;
 import io.openjob.common.constant.TaskConstant;
 import io.openjob.common.constant.TaskStatusEnum;
 import io.openjob.common.constant.TimeExpressionTypeEnum;
+import io.openjob.common.response.WorkerInstanceTaskChildListPullResponse;
 import io.openjob.server.admin.request.task.ListChildTaskRequest;
 import io.openjob.server.admin.request.task.ListTaskLogRequest;
 import io.openjob.server.admin.request.task.ListTaskRequest;
@@ -166,26 +167,30 @@ public class JobInstanceTaskServiceImpl implements JobInstanceTaskService {
         taskChildPullRequestDTO.setCircleId(request.getCircleId());
         taskChildPullRequestDTO.setTaskId(request.getTaskId());
         taskChildPullRequestDTO.setWorkerAddress(jobInstance.getWorkerAddress());
+        taskChildPullRequestDTO.setPage(request.getPage());
+        taskChildPullRequestDTO.setSize(request.getSize());
 
-        List<ListChildTaskVO> taskList = this.jobInstanceScheduler.pullChildTask(taskChildPullRequestDTO).stream().map(t -> {
-            ListChildTaskVO listChildTaskVO = BeanMapperUtil.map(t, ListChildTaskVO.class);
+        WorkerInstanceTaskChildListPullResponse response = this.jobInstanceScheduler.pullChildTask(taskChildPullRequestDTO);
+        List<ListChildTaskVO> taskList = Optional.ofNullable(response.getTaskList()).orElseGet(ArrayList::new)
+                .stream().map(t -> {
+                    ListChildTaskVO listChildTaskVO = BeanMapperUtil.map(t, ListChildTaskVO.class);
 
-            // Map reduce
-            if (ExecuteTypeEnum.isMapReduce(jobInstance.getExecuteType())) {
-                listChildTaskVO.setChildCount(1L);
-            } else {
-                // Sharding or broadcast
-                listChildTaskVO.setChildCount(0L);
-            }
+                    // Map reduce
+                    if (ExecuteTypeEnum.isMapReduce(jobInstance.getExecuteType())) {
+                        listChildTaskVO.setChildCount(1L);
+                    } else {
+                        // Sharding or broadcast
+                        listChildTaskVO.setChildCount(0L);
+                    }
 
-            listChildTaskVO.setPull(CommonConstant.YES);
-            return listChildTaskVO;
-        }).collect(Collectors.toList());
+                    listChildTaskVO.setPull(CommonConstant.YES);
+                    return listChildTaskVO;
+                }).collect(Collectors.toList());
 
         PageVO<ListChildTaskVO> pageVO = new PageVO<>();
-        pageVO.setPage(1);
-        pageVO.setSize(taskList.size());
-        pageVO.setTotal((long) taskList.size());
+        pageVO.setPage(request.getPage());
+        pageVO.setSize(request.getSize());
+        pageVO.setTotal(Optional.ofNullable(response.getTotal()).orElse(0L));
         pageVO.setList(taskList);
         return pageVO;
     }

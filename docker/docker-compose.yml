@@ -1,0 +1,14 @@
+version: "3"
+services:
+  openjob-server:
+    image: openjob/openjob-server:latest
+    restart: always
+    container_name: openjob-server
+    environment:
+      - OJ_DS_URL=jdbc:mysql://172.20.0.235:3306/openjob?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      - OJ_LOG_STORAGE_MYSQL_URL=jdbc:mysql://172.20.0.235:3306/openjob?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      - OJ_SCHEDULER_DELAY_ENABLE=true
+      - OJ_REDIS_HOST=172.20.0.235
+    ports:
+      - "8080:8080"
+      - "25520:25520"

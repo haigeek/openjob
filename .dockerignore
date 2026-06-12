@@ -1,0 +1,7 @@
+**/target/
+!openjob-server/openjob-server-starter/target/openjob-server.jar
+**/node_modules/
+**/.git/
+**/__pycache__/
+**/.DS_Store
+**/*.log

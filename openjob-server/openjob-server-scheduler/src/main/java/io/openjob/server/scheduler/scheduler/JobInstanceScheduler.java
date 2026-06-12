@@ -23,7 +23,6 @@ import io.openjob.server.scheduler.dto.JobInstanceStopResponseDTO;
 import io.openjob.server.scheduler.dto.StopTaskRequestDTO;
 import io.openjob.server.scheduler.dto.StopTaskResponseDTO;
 import io.openjob.server.scheduler.dto.TaskChildPullRequestDTO;
-import io.openjob.server.scheduler.dto.TaskChildPullResponseDTO;
 import io.openjob.server.scheduler.dto.TaskListPullRequestDTO;
 import io.openjob.server.scheduler.dto.TaskListPullResponseDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -82,23 +81,23 @@ public class JobInstanceScheduler {
      * Pull child task
      *
      * @param request request
-     * @return List
+     * @return WorkerInstanceTaskChildListPullResponse
      */
-    public List<TaskChildPullResponseDTO> pullChildTask(TaskChildPullRequestDTO request) {
+    public WorkerInstanceTaskChildListPullResponse pullChildTask(TaskChildPullRequestDTO request) {
         try {
             ServerInstanceTaskChildListPullRequest pullRequest = new ServerInstanceTaskChildListPullRequest();
             pullRequest.setTaskId(request.getTaskId());
             pullRequest.setJobInstanceId(request.getJobInstanceId());
             pullRequest.setDispatchVersion(request.getDispatchVersion());
             pullRequest.setCircleId(request.getCircleId());
+            pullRequest.setPage(request.getPage());
+            pullRequest.setSize(request.getSize());
 
             ActorSelection masterActor = ServerUtil.getWorkerTaskMasterActor(request.getWorkerAddress());
-            WorkerInstanceTaskChildListPullResponse response = FutureUtil.mustAsk(masterActor, pullRequest, WorkerInstanceTaskChildListPullResponse.class, 1000L);
-            return Optional.ofNullable(response.getTaskList()).orElseGet(ArrayList::new)
-                    .stream().map(t -> BeanMapperUtil.map(t, TaskChildPullResponseDTO.class)).collect(Collectors.toList());
+            return FutureUtil.mustAsk(masterActor, pullRequest, WorkerInstanceTaskChildListPullResponse.class, 1000L);
         } catch (Throwable ex) {
             log.warn("Pull instance child task list failed!", ex);
-            return new ArrayList<>();
+            return new WorkerInstanceTaskChildListPullResponse();
         }
     }
 

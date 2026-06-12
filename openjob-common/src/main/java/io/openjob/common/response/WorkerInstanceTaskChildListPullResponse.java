@@ -16,4 +16,9 @@ public class WorkerInstanceTaskChildListPullResponse implements Serializable {
      * Task list.
      */
     private List<WorkerInstanceTaskResponse> taskList;
+
+    /**
+     * Total count.
+     */
+    private Long total;
 }

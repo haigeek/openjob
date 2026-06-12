@@ -226,12 +226,18 @@ public abstract class AbstractTaskMaster implements TaskMaster {
         }
 
         WorkerInstanceTaskChildListPullResponse response = new WorkerInstanceTaskChildListPullResponse();
-        List<Task> tasks = this.taskDAO.findChildTaskList(request.getTaskId());
+
+        Integer page = Optional.ofNullable(request.getPage()).orElse(1);
+        Integer size = Optional.ofNullable(request.getSize()).orElse(Integer.MAX_VALUE);
+
+        List<Task> tasks = this.taskDAO.findChildTaskList(request.getTaskId(), page, size);
+        long total = this.taskDAO.countChildTaskList(request.getTaskId());
 
         // Response
         List<WorkerInstanceTaskResponse> taskResponses = Optional.ofNullable(tasks).orElseGet(ArrayList::new)
                 .stream().map(this::convert2WorkerInstanceTaskResponse).collect(Collectors.toList());
         response.setTaskList(taskResponses);
+        response.setTotal(total);
         return response;
     }
 

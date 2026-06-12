@@ -33,4 +33,14 @@ public class TaskChildPullRequestDTO {
      * Worker address
      */
     private String workerAddress;
+
+    /**
+     * Page
+     */
+    private Integer page;
+
+    /**
+     * Size
+     */
+    private Integer size;
 }
