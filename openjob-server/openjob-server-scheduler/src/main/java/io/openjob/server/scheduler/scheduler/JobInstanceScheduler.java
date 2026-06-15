@@ -92,6 +92,7 @@ public class JobInstanceScheduler {
             pullRequest.setCircleId(request.getCircleId());
             pullRequest.setPage(request.getPage());
             pullRequest.setSize(request.getSize());
+            pullRequest.setStatus(request.getStatus());
 
             ActorSelection masterActor = ServerUtil.getWorkerTaskMasterActor(request.getWorkerAddress());
             return FutureUtil.mustAsk(masterActor, pullRequest, WorkerInstanceTaskChildListPullResponse.class, 1000L);

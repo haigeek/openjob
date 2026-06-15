@@ -230,8 +230,9 @@ public abstract class AbstractTaskMaster implements TaskMaster {
         Integer page = Optional.ofNullable(request.getPage()).orElse(1);
         Integer size = Optional.ofNullable(request.getSize()).orElse(Integer.MAX_VALUE);
 
-        List<Task> tasks = this.taskDAO.findChildTaskList(request.getTaskId(), page, size);
-        long total = this.taskDAO.countChildTaskList(request.getTaskId());
+        Integer status = request.getStatus();
+        List<Task> tasks = this.taskDAO.findChildTaskList(request.getTaskId(), page, size, status);
+        long total = this.taskDAO.countChildTaskList(request.getTaskId(), status);
 
         // Response
         List<WorkerInstanceTaskResponse> taskResponses = Optional.ofNullable(tasks).orElseGet(ArrayList::new)

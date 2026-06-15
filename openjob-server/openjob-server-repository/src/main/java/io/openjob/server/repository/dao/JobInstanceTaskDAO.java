@@ -61,9 +61,10 @@ public interface JobInstanceTaskDAO {
      * @param parentTaskId parentTaskId
      * @param page         page
      * @param size         size
+     * @param status       status filter (null = no filter)
      * @return return
      */
-    PageDTO<JobInstanceTask> getChildList(String parentTaskId, Integer page, Integer size);
+    PageDTO<JobInstanceTask> getChildList(String parentTaskId, Integer page, Integer size, Integer status);
 
     /**
      * Get task list

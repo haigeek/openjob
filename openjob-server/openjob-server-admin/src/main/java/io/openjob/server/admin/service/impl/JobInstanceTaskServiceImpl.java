@@ -132,7 +132,7 @@ public class JobInstanceTaskServiceImpl implements JobInstanceTaskService {
      * @return PageVO
      */
     private PageVO<ListChildTaskVO> getListChildTaskByQuery(ListChildTaskRequest request) {
-        PageDTO<JobInstanceTask> pageDTO = this.jobInstanceTaskDAO.getChildList(request.getTaskId(), request.getPage(), request.getSize());
+        PageDTO<JobInstanceTask> pageDTO = this.jobInstanceTaskDAO.getChildList(request.getTaskId(), request.getPage(), request.getSize(), request.getStatus());
 
         // Empty
         if (CollectionUtils.isEmpty(pageDTO.getList())) {
@@ -169,6 +169,7 @@ public class JobInstanceTaskServiceImpl implements JobInstanceTaskService {
         taskChildPullRequestDTO.setWorkerAddress(jobInstance.getWorkerAddress());
         taskChildPullRequestDTO.setPage(request.getPage());
         taskChildPullRequestDTO.setSize(request.getSize());
+        taskChildPullRequestDTO.setStatus(request.getStatus());
 
         WorkerInstanceTaskChildListPullResponse response = this.jobInstanceScheduler.pullChildTask(taskChildPullRequestDTO);
         List<ListChildTaskVO> taskList = Optional.ofNullable(response.getTaskList()).orElseGet(ArrayList::new)

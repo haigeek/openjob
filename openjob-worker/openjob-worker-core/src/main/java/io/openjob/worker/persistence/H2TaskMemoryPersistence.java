@@ -446,13 +446,20 @@ public class H2TaskMemoryPersistence implements TaskPersistence {
     }
 
     @Override
-    public List<Task> findChildTaskList(String taskId, Integer page, Integer size) throws SQLException {
+    public List<Task> findChildTaskList(String taskId, Integer page, Integer size, Integer status) throws SQLException {
         ResultSet rs = null;
-        String sql = "SELECT * FROM `task` WHERE `task_parent_id`=? ORDER BY `id` DESC LIMIT ? OFFSET ?";
+        boolean filterStatus = Objects.nonNull(status);
+        String sql = "SELECT * FROM `task` WHERE `task_parent_id`=?"
+                + (filterStatus ? " AND `status`=?" : "")
+                + " ORDER BY `id` DESC LIMIT ? OFFSET ?";
         try (Connection connection = this.connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, taskId);
-            ps.setInt(2, size);
-            ps.setInt(3, (page - 1) * size);
+            int idx = 1;
+            ps.setString(idx++, taskId);
+            if (filterStatus) {
+                ps.setInt(idx++, status);
+            }
+            ps.setInt(idx++, size);
+            ps.setInt(idx, (page - 1) * size);
             rs = ps.executeQuery();
 
             List<Task> taskList = new ArrayList<>();
@@ -468,11 +475,16 @@ public class H2TaskMemoryPersistence implements TaskPersistence {
     }
 
     @Override
-    public long countChildTaskList(String taskId) throws SQLException {
+    public long countChildTaskList(String taskId, Integer status) throws SQLException {
         ResultSet rs = null;
-        String sql = "SELECT COUNT(*) FROM `task` WHERE `task_parent_id`=?";
+        boolean filterStatus = Objects.nonNull(status);
+        String sql = "SELECT COUNT(*) FROM `task` WHERE `task_parent_id`=?"
+                + (filterStatus ? " AND `status`=?" : "");
         try (Connection connection = this.connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, taskId);
+            if (filterStatus) {
+                ps.setInt(2, status);
+            }
             rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getLong(1);

@@ -42,4 +42,9 @@ public class ServerInstanceTaskChildListPullRequest implements Serializable {
      * Size
      */
     private Integer size;
+
+    /**
+     * Task status filter (optional)
+     */
+    private Integer status;
 }

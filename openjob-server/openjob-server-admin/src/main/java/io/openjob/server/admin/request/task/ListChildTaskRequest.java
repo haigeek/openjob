@@ -30,4 +30,7 @@ public class ListChildTaskRequest extends PageRequest {
     @NotNull
     @ApiModelProperty(value = "Pull", required = true)
     private Integer pull;
+
+    @ApiModelProperty(value = "Task status filter (optional)")
+    private Integer status;
 }

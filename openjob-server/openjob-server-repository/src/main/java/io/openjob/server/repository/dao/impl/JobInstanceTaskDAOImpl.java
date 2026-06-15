@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author stelin swoft@qq.com
@@ -64,9 +65,12 @@ public class JobInstanceTaskDAOImpl implements JobInstanceTaskDAO {
     }
 
     @Override
-    public PageDTO<JobInstanceTask> getChildList(String parentTaskId, Integer page, Integer size) {
+    public PageDTO<JobInstanceTask> getChildList(String parentTaskId, Integer page, Integer size, Integer status) {
         JobInstanceTask jobInstanceTask = new JobInstanceTask();
         jobInstanceTask.setParentTaskId(parentTaskId);
+        if (Objects.nonNull(status)) {
+            jobInstanceTask.setStatus(status);
+        }
 
         // Pagination
         PageDTO<JobInstanceTask> pageDTO = new PageDTO<>();
