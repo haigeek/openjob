@@ -19,4 +19,6 @@ public class WorkerDTO {
     private String address;
 
     private String protocolType;
+
+    private Integer status;
 }

@@ -63,6 +63,7 @@ public class ClusterUtil {
                     workerDTO.setAddress(w.getAddress());
                     workerDTO.setProtocolType(w.getProtocolType());
                     workerDTO.setAppName(w.getAppName());
+                    workerDTO.setStatus(w.getStatus());
                     return workerDTO;
                 })
                 .collect(Collectors.groupingBy(WorkerDTO::getAppId));

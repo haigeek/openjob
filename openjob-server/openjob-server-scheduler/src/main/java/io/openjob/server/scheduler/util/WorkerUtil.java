@@ -2,6 +2,7 @@ package io.openjob.server.scheduler.util;
 
 import io.openjob.server.common.ClusterContext;
 import io.openjob.server.common.dto.WorkerDTO;
+import io.openjob.server.repository.constant.WorkerStatusEnum;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -28,8 +29,10 @@ public class WorkerUtil {
             return null;
         }
 
-        // Remove failover workers.
-        List<WorkerDTO> availableWorkers = workers.stream().filter((w) -> !failoverList.contains(w.getAddress()))
+        // Remove failover and offline workers.
+        List<WorkerDTO> availableWorkers = workers.stream()
+                .filter((w) -> WorkerStatusEnum.ONLINE.getStatus().equals(w.getStatus()))
+                .filter((w) -> !failoverList.contains(w.getAddress()))
                 .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(availableWorkers)) {
             return null;
