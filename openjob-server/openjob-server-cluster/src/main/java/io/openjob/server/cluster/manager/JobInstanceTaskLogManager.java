@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -70,13 +71,18 @@ public class JobInstanceTaskLogManager {
                     .orElseGet(() -> Lists.newArrayList(new WorkerJobInstanceTaskLogReqDTO.WorkerJobInstanceTaskLogFieldReqDTO()))
                     .get(0).getValue();
 
+            // Skip if timestamp is missing
+            if (timeStamp == null) {
+                return null;
+            }
+
             ProcessorLogDTO processorLog = new ProcessorLogDTO();
             processorLog.setTaskId(taskId);
             processorLog.setWorkerAddress(workerAddress);
             processorLog.setTime(Long.valueOf(timeStamp));
             processorLog.setFields(BeanMapperUtil.mapList(fields, WorkerJobInstanceTaskLogReqDTO.WorkerJobInstanceTaskLogFieldReqDTO.class, ProcessorLogFieldDTO.class));
             return processorLog;
-        })).collect(Collectors.toList());
+        })).filter(Objects::nonNull).collect(Collectors.toList());
 
         try {
             logDAO.batchAdd(processorLogList);
