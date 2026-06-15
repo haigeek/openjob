@@ -121,7 +121,7 @@ public class JobInstanceServiceImpl implements JobInstanceService {
 
     @Override
     public DeleteJobInstanceVO deleteInstance(DeleteJobInstanceRequest request) {
-        this.jobInstanceDAO.deleteById(request.getId());
+        this.jobInstanceDAO.deleteByIds(request.getIds());
         return new DeleteJobInstanceVO();
     }
 

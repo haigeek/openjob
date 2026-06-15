@@ -3,7 +3,8 @@ package io.openjob.server.admin.request.job;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * @author stelin swoft@qq.com
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class DeleteJobInstanceRequest {
-    @NotNull
-    @ApiModelProperty(value = "Delete id", required = true)
-    private Long id;
+    @NotEmpty
+    @ApiModelProperty(value = "Delete ids", required = true)
+    private List<Long> ids;
 }

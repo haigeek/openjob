@@ -30,6 +30,13 @@ public interface JobInstanceDAO {
     void deleteById(Long id);
 
     /**
+     * Delete by ids
+     *
+     * @param ids ids
+     */
+    void deleteByIds(List<Long> ids);
+
+    /**
      * Update
      *
      * @param id         id
