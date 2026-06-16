@@ -21,4 +21,6 @@ public class WorkerDTO {
     private String protocolType;
 
     private Integer status;
+
+    private Long lastHeartbeatTime;
 }

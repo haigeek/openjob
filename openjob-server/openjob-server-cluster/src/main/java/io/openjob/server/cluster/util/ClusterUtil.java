@@ -64,6 +64,7 @@ public class ClusterUtil {
                     workerDTO.setProtocolType(w.getProtocolType());
                     workerDTO.setAppName(w.getAppName());
                     workerDTO.setStatus(w.getStatus());
+                    workerDTO.setLastHeartbeatTime(w.getLastHeartbeatTime());
                     return workerDTO;
                 })
                 .collect(Collectors.groupingBy(WorkerDTO::getAppId));
