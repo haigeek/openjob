@@ -9,6 +9,7 @@ import io.openjob.server.cluster.autoconfigure.ClusterProperties;
 import io.openjob.server.cluster.dto.WorkerStartReqDTO;
 import io.openjob.server.cluster.dto.WorkerStartRespDTO;
 import io.openjob.server.cluster.dto.WorkerStopReqDTO;
+import io.openjob.server.cluster.data.RefreshData;
 import io.openjob.server.cluster.manager.WorkerManager;
 import io.openjob.server.common.ClusterContext;
 import io.openjob.server.common.util.BeanMapperUtil;
@@ -36,12 +37,14 @@ public class WorkerService {
     private final WorkerDAO workerDAO;
     private final ClusterProperties clusterProperties;
     private final WorkerManager workerManager;
+    private final RefreshData refreshData;
 
     @Autowired
-    public WorkerService(WorkerDAO workerDAO, ClusterProperties clusterProperties, WorkerManager workerManager) {
+    public WorkerService(WorkerDAO workerDAO, ClusterProperties clusterProperties, WorkerManager workerManager, RefreshData refreshData) {
         this.workerDAO = workerDAO;
         this.clusterProperties = clusterProperties;
         this.workerManager = workerManager;
+        this.refreshData = refreshData;
     }
 
     /**
@@ -116,5 +119,8 @@ public class WorkerService {
                 this.workerStop(workerStopRequest);
             }
         });
+
+        // Refresh in-memory worker cache to ensure APP_WORKERS is up-to-date
+        this.refreshData.refreshAppWorkers();
     }
 }
