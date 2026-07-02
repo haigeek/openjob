@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class WorkerUtil {
 
     /**
-     * Worker heartbeat offline threshold (milliseconds).
+     * Worker heartbeat offline threshold (seconds).
      */
-    private static final Long OFFLINE_THRESHOLD = 20000L;
+    private static final Long OFFLINE_THRESHOLD = 20L;
 
     /**
      * Select one worker by appid.
